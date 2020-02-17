@@ -1,23 +1,37 @@
 ---
 title: "Statiko Documentation"
 linkTitle: "Documentation"
-weight: 20
+weight: -1
 menu:
   main:
-    weight: 20
+    weight: -1
 ---
 
-{{% pageinfo %}}
-This is a placeholder page that shows you how to use this template site.
-{{% /pageinfo %}}
+## What is Statiko
 
+Statiko is a self-hosted platform that works alongisde the popular [nginx](https://nginx.org) web server (known for its speed, reliability and security) as a sidecar, and enables you to host, serve, and manage static web apps ([JAMstack apps](https://jamstack.org/)) in production.
 
-This section is where the user documentation for your project lives - all the information your users need to understand and successfully use your project. 
+With Statiko, you have advanced control on the web server, so you can for example add custom headers, manage redirects and clean URLs. This makes it possible to host [Progressive Web Apps (PWAs)](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps) effectively.
 
-For large documentation sets we recommend adding content under the headings in this section, though if some or all of them don’t apply to your project feel free to remove them or add your own. You can see an example of a smaller Docsy documentation site in the [Docsy User Guide](https://docsy.dev/docs/), which lives in the [Docsy theme repo](https://github.com/google/docsy/tree/master/userguide) if you'd like to copy its docs section. 
+Statiko lets you control what sites and apps your nodes should be running, and takes care of automatically re-configuring the nginx server for you, with no downtime.
 
-Other content such as marketing material, case studies, and community updates should live in the [About](/about/) and [Community](/community/) pages.
+When building JAMstack apps, Statiko fits nicely in your DevOps toolset, enabling Continuous Delivery of your apps.
 
-Find out how to use the Docsy theme in the [Docsy User Guide](https://docsy.dev/docs/). You can learn more about how to organize your documentation (and how we organized this site) in [Organizing Your Content](https://docsy.dev/docs/best-practices/organizing-content/).
+Statiko runs on any Linux server as a standalone app or a Docker container. You can also deploy Statiko on a Kubernetes cluster, alongside your back-end services. We publish binaries and Docker containers for amd64, arm64 and arm32v7 (armhf for Raspberry Pi).
 
+Lastly, Statiko is designed to support scenarios that require horizontal scalability, high-availibity, and even geo-redundancy.
 
+Statiko is free software, released under the GNU Affero General Public License v3.0 (see [LICENSE](https://github.com/ItalyPaleAle/Statiko/blob/master/LICENSE)).
+
+## Features
+
+Statiko's core features:
+
+- Manage sites and apps via a REST API, or using the _[stkcli](/docs/stkcli)_ CLI
+- Automatically reconfigure a nginx web server, with no downtime
+- Ensure TLS certificates are present; supports generating self-signed certificates, and notifies admins when certificates are expiring (via webhook invocation)
+- Apps can configure all response headers (e.g. Client-Caching, Content-Type, etc), configure redirects and clean URLs
+- App bundles can be cryptographically signed with the _stkcli_ to ensure the integrity and origin of the code
+- Distributed as a Docker container for simplified deployment, also on Kubernetes; however, you can run Statiko on any Linux server un-containerized if you prefer
+
+Additionally, Statiko nodes can be configured in a cluster, delivering horizontal scalability and high-availability. Nodes can be geo-distributed for very high level of redundancy. Nodes are automatically kept in sync thanks to [etcd](https://etcd.io/).

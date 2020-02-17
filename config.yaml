@@ -86,7 +86,7 @@ params:
   # A link to latest version of the docs. Used in the "version-banner" partial to point people to the main doc site.
   url_latest_version: 'https://example.com'
   # Repository configuration (URLs for in-page links to opening issues and suggesting changes)
-  github_repo: 'https://github.com/ItalyPaleAle/statiko-docs'
+  github_repo: 'https://github.com/Statiko-dev/statiko.dev'
   # An optional link to a related project repo
   # For example, the sibling repository where your product code lives.
   github_project_repo: 'https://github.com/ItalyPaleAle/Statiko'
@@ -129,6 +129,6 @@ params:
     # Developer relevant links. These will show up on right side of footer and in the community page if you have one
     developer:
       - name: GitHub
-        url: 'https://github.com/ItalyPaleAle/Statiko'
+        url: 'https://github.com/Statiko-dev'
         icon: fab fa-github
         desc: Development for Statiko takes place on GitHub
