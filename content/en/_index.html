@@ -1,81 +1,59 @@
 +++
-title = "Goldydocs"
-linkTitle = "Goldydocs"
-
+title = "Statiko"
+linkTitle = "Statiko"
 +++
 
-{{< blocks/cover title="Welcome to Goldydocs: A Docsy Example Project!" image_anchor="top" height="full" color="orange" >}}
+{{< blocks/cover title="Host, serve and manage static web apps in production" image_anchor="top" height="full" color="blue" >}}
 <div class="mx-auto">
 	<a class="btn btn-lg btn-primary mr-3 mb-4" href="{{< relref "/docs" >}}">
-		Learn More <i class="fas fa-arrow-alt-circle-right ml-2"></i>
+		Get started <i class="fas fa-arrow-alt-circle-right ml-2"></i>
 	</a>
-	<a class="btn btn-lg btn-secondary mr-3 mb-4" href="https://github.com/google/docsy-example">
-		Download <i class="fab fa-github ml-2 "></i>
+	<a class="btn btn-lg btn-secondary mr-3 mb-4" href="https://github.com/ItalyPaleAle/Statiko">
+		Source <i class="fab fa-github ml-2 "></i>
 	</a>
-	<p class="lead mt-5">Porridge temperature assessment - in the cloud!</p>
-	{{< blocks/link-down color="info" >}}
+	<p class="lead mt-5" style="text-shadow: 1px 1px 0px #2C2C2C;">Self-hosted, free and open source platform that works alongside nginx.<br/>Designed for high-availability and geo-replication.</p>
+	{{< blocks/link-down color="white" >}}
 </div>
 {{< /blocks/cover >}}
 
 
 {{% blocks/lead color="primary" %}}
-Goldydocs provides a single web UI providing visibility into porridge temperature, chair size, and bed softness metrics! You can even find out who's been eating **your** porridge.
+Statiko was born to bring convenience to hosting, serving and managing static web apps, including JAMstack apps, working alongside the nginx web server.
 
-(Sadly, Goldydocs isn't a real project, but you can use this site as an example to create your own real websites with [Docsy](http://docsy.dev))
+Statiko enables apps to be brought to production conveniently, and it's designed to support scenarios that require high-availability and even geo-replication.
 {{% /blocks/lead %}}
 
 {{< blocks/section color="dark" >}}
-{{% blocks/feature icon="fa-lightbulb" title="New chair metrics!" %}}
-The Goldydocs UI now shows chair size metrics by default.
 
-Please follow this space for updates!
+{{% blocks/feature icon="fa-tools" title="Self-host anywhere" %}}
+Statiko runs on any Linux server or on Kubernetes, and nodes can be on any cloud or on-premises.
 {{% /blocks/feature %}}
 
-
-{{% blocks/feature icon="fab fa-github" title="Contributions welcome!" url="https://github.com/google/docsy-example" %}}
-We do a [Pull Request](https://github.com/gohugoio/hugo/pulls) contributions workflow on **GitHub**. New users are always welcome!
+{{% blocks/feature icon="fa-fire-alt" title="Ready for your PWA" %}}
+With full control on response headers, redirects, clean URLs, you can serve Progressive Web Apps (PWA) efficiently with Statiko.
 {{% /blocks/feature %}}
 
-
-{{% blocks/feature icon="fab fa-twitter" title="Follow us on Twitter!" url="https://twitter.com/docsydocs" %}}
-For announcement of latest features etc.
+{{% blocks/feature icon="fa-cogs" title="Works with nginx" %}}
+Statiko works as a sidecar for the popular nginx web server, which is fast, reliable and secure. Statiko manages nginx's configuration dynamically so you don't have to.
 {{% /blocks/feature %}}
 
+{{% blocks/feature icon="fa-rocket" title="DevOps-enabled" %}}
+Statiko nodes can be managed remotely via REST APIs and with the **_stkcli_ utility**, and it's designed to be used in CI/CD pipelines.
+{{% /blocks/feature %}}
+
+{{% blocks/feature icon="fas fa-globe" title="Highly-Availabile apps" %}}
+Deploy multiple Statiko nodes to achieve High-Availability for your apps, with support for geo-distributed deployments too.
+{{% /blocks/feature %}}
+
+{{% blocks/feature icon="fas fa-scroll" title="Free software" %}}
+Statiko is free software, released under GNU Affero GPL. Written in Go, the source code is available on GitHub.
+{{% /blocks/feature %}}
 
 {{< /blocks/section >}}
 
 
 {{< blocks/section >}}
 <div class="col">
-<h1 class="text-center">This is the second Section</h1>
+<h2 class="text-center">Read the <a href="{{< relref "/docs" >}}">Documentation</a> to get started</h2>
 </div>
-
-{{< /blocks/section >}}
-
-
-
-{{< blocks/section >}}
-{{% blocks/feature icon="fab fa-app-store-ios" title="Download **from AppStore**" %}}
-Get the Goldydocs app!
-{{% /blocks/feature %}}
-
-
-{{% blocks/feature icon="fab fa-github" title="Contributions welcome!" url="https://github.com/gohugoio/hugo" %}}
-We do a [Pull Request](https://github.com/gohugoio/hugo/pulls) contributions workflow on **GitHub**. New users are always welcome!
-{{% /blocks/feature %}}
-
-
-{{% blocks/feature icon="fab fa-twitter" title="Follow us on Twitter!" url="https://twitter.com/GoHugoIO" %}}
-For announcement of latest features etc.
-{{% /blocks/feature %}}
-
-
-{{< /blocks/section >}}
-
-{{< blocks/section >}}
-
-<div class="col-12">
-<h1 class="text-center">This is another Section</h1>
-</div>
-
 {{< /blocks/section >}}

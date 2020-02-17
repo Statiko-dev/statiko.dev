@@ -1,6 +1,5 @@
-
 ---
-title: "Documentation"
+title: "Statiko Documentation"
 linkTitle: "Documentation"
 weight: 20
 menu:
