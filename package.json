@@ -20,6 +20,8 @@
   "dependencies": {},
   "devDependencies": {
     "autoprefixer": "^9.7.4",
+    "js-yaml": "^3.13.1",
+    "node-fetch": "^2.6.0",
     "postcss-cli": "^7.1.0"
   }
 }
