@@ -1,0 +1,210 @@
+# Required variables:
+# NODE_ADDRESS: Address (IP or hostname) of the platform's node to connect to (must be able to accept connections on port 2265)
+# NODE_KEY (secret): shared key for authenticating with the node
+
+# Define repository
+resources:
+  - repo: self
+
+# Trigger on changes to the master branch
+trigger:
+  - master
+
+variables:
+  # Sites
+  SITE_PRODUCTION: 'statiko.dev'
+  SITE_STAGING: 'staging.statiko.dev'
+  # Azure connection ID
+  AZURE_SERVICE_CONNECTION: '2ac418d2-f0b4-4d6f-be85-f4998ea75559'
+  # Version of Hugo to use
+  HUGO_VERSION: 0.64.1
+
+# Stages
+stages:
+
+  # Build app stage
+  - stage: build
+    displayName: 'Build app'
+    jobs:
+
+      # Build app job
+      - job: build
+        displayName: 'Build app'
+
+        # Run on Linux (Ubuntu 18.04)
+        pool:
+          vmImage: 'Ubuntu 18.04'
+
+        # Steps
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: '12.x'
+            displayName: 'Install Node.js'
+
+          # Install Hugo
+          - script: |
+              set -e
+              cd /tmp
+              echo "Using Hugo $(HUGO_VERSION)"
+              curl -fsSL "https://github.com/gohugoio/hugo/releases/download/v$(HUGO_VERSION)/hugo_extended_$(HUGO_VERSION)_Linux-64bit.tar.gz" -o hugo.tar.gz
+              tar -zxf hugo.tar.gz
+              sudo mv hugo /usr/local/bin
+            displayName: 'Install Hugo'
+
+          # Build the site
+          - script: 'make dist'
+            displayName: 'Build site'
+
+          # Publish the compiled site as pipeline artifact
+          - publish: '$(System.DefaultWorkingDirectory)/public'
+            displayName: 'Publish Artifact: public'
+            artifact: 'public'
+
+  # Stage app stage
+  - stage: staging
+    displayName: 'Stage app'
+    jobs:
+
+      # Stage app job
+      - deployment: staging
+        environment: Statiko-Docs-Staging
+        displayName: 'Stage app'
+
+        # Run on the self-hosted agent in the LAN
+        pool:
+          name: Default
+          demands:
+            - network -equals lacasetta
+        
+        # Deployment strategy is "runOnce"
+        strategy:
+          runOnce:
+            deploy:
+              # Steps
+              steps:
+                # Do not checkout source
+                - checkout: none
+
+                # Download pipeline artifact
+                - download: current
+                  artifact: 'drop'
+                  displayName: 'Download Artifact: drop'
+
+                # Install stkcli
+                - bash: |
+                    set -e
+                    URL=$(curl -s https://api.github.com/repos/ItalyPaleAle/stkcli/releases/latest -H "Accept: application/vnd.github.v3+json" \
+                      | jq -r ".assets[] | select(.name | test(\"linux_arm32v7\")) | .browser_download_url")
+                    echo "Downloading stkcli: $URL"
+                    curl -L "$URL" -o stkcli
+                    chmod +x stkcli
+                    ./stkcli version
+                  displayName: "Install stkcli"
+                
+                # Deploy app to staging (with Azure CLI authorization)
+                - task: AzureCLI@2
+                  displayName: 'Deploy app to staging'
+                  inputs:
+                    azureSubscription: $(AZURE_SERVICE_CONNECTION)
+                    scriptType: 'bash'
+                    scriptLocation: 'inlineScript'
+                    inlineScript: |
+                      set -e
+
+                      # Get version from Azure Pipelines
+                      echo "Version: $(Build.BuildNumber)"
+
+                      echo "Folder: $(Pipeline.Workspace)/drop"
+                      ls -l $(Pipeline.Workspace)/drop
+
+                      # Upload the app
+                      export NODE_KEY="$(NODE_KEY)"
+                      ./stkcli upload app \
+                        -n $(NODE_ADDRESS) \
+                        -k \
+                        -a statiko-docs \
+                        -v $(Build.BuildNumber) \
+                        -f $(Pipeline.Workspace)/drop
+
+                      # Deploy to staging
+                      ./stkcli deploy \
+                        -n $(NODE_ADDRESS) \
+                        -k \
+                        -d $(SITE_STAGING) \
+                        -a statiko-docs \
+                        -v $(Build.BuildNumber)
+
+                # Post-build cleanup
+                # Necessary only for self-hosted pipelines
+                - bash: |
+                    # Delete files from disk
+                    rm -rvf $(Agent.BuildDirectory) || true
+                    rm -rvf $(Build.SourcesDirectory) || true
+                    rm -rvf $(Build.ArtifactStagingDirectory) || true
+                  displayName: "Post-build cleanup"
+                  # This step always runs, even if the pipeline failed
+                  condition: always()
+
+  # Deploy to production stage
+  - stage: production
+    displayName: 'Deploy to production'
+    jobs:
+
+      # Deploy to production
+      - deployment: production
+        environment: Statiko-Docs-Production
+        displayName: 'Deploy to production'
+
+        # Run on the self-hosted agent in the LAN
+        pool:
+          name: Default
+          demands:
+            - network -equals lacasetta
+        
+        # Deployment strategy is "runOnce"
+        strategy:
+          runOnce:
+            deploy:
+              # Steps
+              steps:
+                # Do not checkout source
+                - checkout: none
+
+                # Do not download artifacts
+                - download: none
+
+                # Install stkcli
+                - bash: |
+                    set -e
+                    URL=$(curl -s https://api.github.com/repos/ItalyPaleAle/stkcli/releases/latest -H "Accept: application/vnd.github.v3+json" \
+                      | jq -r ".assets[] | select(.name | test(\"linux_arm32v7\")) | .browser_download_url")
+                    echo "Downloading stkcli: $URL"
+                    curl -L "$URL" -o stkcli
+                    chmod +x stkcli
+                    ./stkcli version
+                  displayName: "Install stkcli"
+
+                # Deploy app to production
+                - script: |
+                    set -e
+                    ./stkcli deploy \
+                      -n $(NODE_ADDRESS) \
+                      -k \
+                      -d $(SITE_PRODUCTION) \
+                      -a statiko-docs \
+                      -v $(Build.BuildNumber)
+                  displayName: 'Deploy app to production'
+                  env:
+                    NODE_KEY: $(NODE_KEY)
+                
+                # Post-build cleanup
+                # Necessary only for self-hosted pipelines
+                - bash: |
+                    # Delete files from disk
+                    rm -rvf $(Agent.BuildDirectory) || true
+                    rm -rvf $(Build.SourcesDirectory) || true
+                    rm -rvf $(Build.ArtifactStagingDirectory) || true
+                  displayName: "Post-build cleanup"
+                  # This step always runs, even if the pipeline failed
+                  condition: always()
