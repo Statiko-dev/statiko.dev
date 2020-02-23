@@ -15,7 +15,7 @@ variables:
   SITE_PRODUCTION: 'statiko.dev'
   SITE_STAGING: 'staging.statiko.dev'
   # Azure connection ID
-  AZURE_SERVICE_CONNECTION: '2ac418d2-f0b4-4d6f-be85-f4998ea75559'
+  AZURE_SERVICE_CONNECTION: '53ccb313-533c-41fb-8ec1-61ce75c7ef2c'
   # Version of Hugo to use
   HUGO_VERSION: 0.64.1
 
