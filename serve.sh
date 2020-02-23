@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 
 echo "\033[0;1mBuilding for environment: \033[0;1;35mdevelopment\033[0;0m"
 
