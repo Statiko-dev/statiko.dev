@@ -1,6 +1,7 @@
 ---
 title: "System Requirements"
 linkTitle: "System Requirements"
+slug: system-requirements
 weight: 1
 description: |
   Suggested minimum system requirements
@@ -32,4 +33,4 @@ Statiko supports clustering natively, so you can also increase your overall reso
 
 While operating in a cluster, you can also achieve higher availability for your apps. Clusters can also be geo-distributed, with servers located in multiple datacenters around the world.
 
-Check out the section on [clustering](/docs/how-to/clustering) for more details.
+Check out the section on [clustering](/docs/for-admins/how-to/clustering) for more details.
