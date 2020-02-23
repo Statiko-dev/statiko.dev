@@ -88,8 +88,8 @@ stages:
 
                 # Download pipeline artifact
                 - download: current
-                  artifact: 'drop'
-                  displayName: 'Download Artifact: drop'
+                  artifact: 'public'
+                  displayName: 'Download Artifact: public'
 
                 # Install stkcli
                 - bash: |
@@ -115,8 +115,8 @@ stages:
                       # Get version from Azure Pipelines
                       echo "Version: $(Build.BuildNumber)"
 
-                      echo "Folder: $(Pipeline.Workspace)/drop"
-                      ls -l $(Pipeline.Workspace)/drop
+                      echo "Folder: $(Pipeline.Workspace)/public"
+                      ls -l $(Pipeline.Workspace)/public
 
                       # Upload the app
                       export NODE_KEY="$(NODE_KEY)"
@@ -125,7 +125,7 @@ stages:
                         -k \
                         -a statiko-docs \
                         -v $(Build.BuildNumber) \
-                        -f $(Pipeline.Workspace)/drop
+                        -f $(Pipeline.Workspace)/public
 
                       # Deploy to staging
                       ./stkcli deploy \
