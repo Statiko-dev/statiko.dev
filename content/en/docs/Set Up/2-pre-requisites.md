@@ -257,5 +257,5 @@ az keyvault key create \
 
 You've completed the creation of all pre-requisites. As a next step, learn how to run Statiko:
 
-- [Using Docker](/docs/for-admins/set-up/run-with-docker) (recommended)
-- As a [standalone app](/docs/for-admins/set-up/run-standalone)
+- [Using Docker](/docs/set-up/run-with-docker) (recommended)
+- As a [standalone app](/docs/set-up/run-standalone)

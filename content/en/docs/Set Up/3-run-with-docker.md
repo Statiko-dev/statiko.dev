@@ -8,7 +8,7 @@ description: |
 ---
 
 {{% pageinfo %}}
-Make sure you've addressed all the [pre-requisites](/docs/for-admins/set-up/pre-requisites) before continuing.
+Make sure you've addressed all the [pre-requisites](/docs/set-up/pre-requisites) before continuing.
 {{% /pageinfo %}}
 
 The recommended way to run Statiko is to leverage the official Docker images published on Docker Hub [statiko/statiko](https://hub.docker.com/r/statiko/statiko). These images are based on Alpine Linux and are available for amd64, arm64 and arm32v7.
