@@ -9,17 +9,19 @@ description: |
 
 Statiko nodes can run on any server, on any cloud and on-premises.
 
-However, Statiko requires an object storage service and a key vault to store app bundles and secrets such as TLS certificates and codesigning keys. At the moment, Statiko uses Microsoft Azure for those services. We're happy to accept contributions that add support for other storage services or key vaults.
+However, Statiko requires an object storage service and a key vault to store app bundles and secrets such as TLS certificates and code signing keys. At the moment, Statiko uses Microsoft Azure for those services. We're happy to accept contributions that add support for other storage services or key vaults.
 
 On Azure, Statiko requires:
 
 - Azure Blob Storage: an object storage service to store the app bundles
-- Azure Key Vault: a vault to store TLS certificates (public certificates and private keys) and the codesigning key
+- Azure Key Vault: a vault to store TLS certificates (public certificates and private keys) and the code signing key
 - Azure AD: identity service that can be used by clients to authenticate with Statiko nodes (this is optional)
 
 For most users these two services are going to be free or cost a nominal amount every month, less than $1/month after the free trial ends.
 
 If you don't have one already, get an [Azure account](https://azure.com/free) and start the free trial.
+
+After creating the Azure resources, we'll also create a code signing key stored inside Azure Key Vault.
 
 # Azure resources
 
@@ -88,7 +90,7 @@ az storage container create \
 
 ## Azure Key Vault
 
-Next, create an Azure Key Vault that will store TLS certificates and codesigning keys, safely.
+Next, create an Azure Key Vault that will store TLS certificates and code signing keys, safely.
 
 ```sh
 # Name of the Key Vault; must be globally unique
@@ -230,7 +232,28 @@ Take note of the following values that will be used in the Statiko node's config
 - Application ID, which is the value for `auth.azureAD.clientId`
 - Tenant ID, which is the value for `auth.azureAD.tenantId`
 
-## Next step
+# Code signing key
+
+Lastly, let's create a code signing key inside Azure Key Vault. Statiko will use this key to cryptographically sign app bundles (guaranteeing both origin and integrity), and to verify signatures before deploying apps.
+
+We can create the key directly inside Azure Key Vault, safely:
+
+```sh
+# Create a new RSA-4096 key in the Key Vault, which can be used for signing and verifying messages
+az keyvault key create \
+  --name codesign \
+  --vault-name $KEY_VAULT_NAME \
+  --kty RSA \
+  --size 4096 \
+  --protection software \
+  --ops sign verify
+```
+
+> Note that the key you create will be stored inside Azure Key Vault and you will not be able to export it.
+>
+> If you require a copy of the key saved locally, you can generate a RSA-4096 key with OpenSSL and import it to Azure Key Vault with [`az keyvault key import`](https://docs.microsoft.com/en-us/cli/azure/keyvault/key?view=azure-cli-latest#az-keyvault-key-import).
+
+# Next steps
 
 You've completed the creation of all pre-requisites. As a next step, learn how to run Statiko:
 
