@@ -27,7 +27,7 @@ Statiko is free software, released under the GNU Affero General Public License v
 
 Statiko's core features:
 
-- Manage sites and apps via a REST API, or using the _[stkcli](/docs/stkcli)_ CLI
+- Manage sites and apps via a REST API, or using the _[stkcli](/docs/cli)_ CLI
 - Automatically reconfigure a nginx web server, with no downtime
 - Ensure TLS certificates are present; supports generating self-signed certificates, and notifies admins when certificates are expiring (via webhook invocation)
 - Apps can configure all response headers (e.g. Client-Caching, Content-Type, etc), configure redirects and clean URLs

@@ -17,6 +17,8 @@ The Docker images contain both the Statiko binary and the nginx web server, main
 
 > This document assumes that you already have Docker (and possibly Docker Compose) available on your server. If you need to install Docker, check the [official documentation](https://docs.docker.com/install/).
 
+> The images in the _statiko/statiko_ repository on Docker Hub are multi-arch, so Docker will pick the correct architecture automatically. However, continuous integration images (including those tagged with `:canary` and those with a tag starting with `:ci`) are available for amd64 only.
+
 # Firewall rules
 
 Statiko requires **inbound ports 80 and 443** (TCP) open to serve web traffic.
@@ -32,7 +34,7 @@ Statiko needs to have two Docker volumes where to store persistent data: one for
 Let's start by creating a folder for all of Statiko data, which we'll call the **Statiko root**. We'll be using `/statiko` in this example, although you can use any other folder. Inside the Statiko root, we will create a folder for the configuration and one for the data.
 
 ```sh
-STATIKO_ROOT="/statiko"
+export STATIKO_ROOT="/statiko"
 # Configuration
 sudo mkdir -p $STATIKO_ROOT/config
 sudo chmod 0700 $STATIKO_ROOT/config
@@ -61,27 +63,34 @@ sudo ln -s $MOUNTPOINT/statiko-data $STATIKO_ROOT/data
 
 # TLS certificates
 
-Clients (such as the stkcli) can communicate with Statiko nodes using REST APIs, which are used to configure the node: manage sites and apps, check status, etc. This communication happens on port 2265 (configurable with the `port` option), and uses TLS.
+Clients (such as the stkcli) can communicate with Statiko nodes using REST APIs, which are used to configure the node: manage sites and apps, check status, etc. This communication happens on port 2265 (configurable with the [`port`](TODO) option), and uses TLS.
 
 Place the TLS certificate in the configuration folder (where `$STATIKO_ROOT` is the path of the Statiko root folder)
 
 - Certificate: `$STATIKO_ROOT/config/node-public.crt`
 - Private key: `$STATIKO_ROOT/config/node-private.key`
 
-The path can be changed with the [`tls.node.certificate`](TODO) and [`tls.node.key`](TODO) configuration options, but keep in mind that the paths in the config file are relative to the paths within the Docker container (see below for Docker volume mountpoints).
+These locations can be changed with the [`tls.node.certificate`](TODO) and [`tls.node.key`](TODO) configuration options, but keep in mind that the paths in the config file are relative to the paths within the Docker container (see below for Docker volume mountpoints).
 
 > If you don't have a TLS certificate, you can generate a self-signed one with this command:
 >
 > ````sh
-> DOMAIN="statiko.mydomain.com"
+> export DOMAIN="statiko.mydomain.com"
 > echo "Generating TLS cert for: $DOMAIN"
-> sudo openssl req -x509 -newkey rsa:4096 -nodes -reqexts SAN -extensions SAN > -sha256 \
->   -config <(sudo cat /etc/ssl/openssl.cnf \
->     <(printf "[SAN]\nsubjectAltName=DNS:${DOMAIN}")) \
->   -days 365 \
->   -keyout $STATIKO_ROOT/config/node-private.key \
->   -out $STATIKO_ROOT/config/node-public.crt \
->   -subj "/CN=${DOMAIN}"
+> cat <<HEREDOC | sudo bash
+>   openssl req -x509 \
+>     -newkey rsa:4096 \
+>     -nodes \
+>     -reqexts SAN \
+>     -extensions SAN \
+>     -sha256 \
+>     -config <(cat /etc/ssl/openssl.cnf \
+>       <(printf "[SAN]\nsubjectAltName=DNS:${DOMAIN}")) \
+>     -days 365 \
+>     -keyout $STATIKO_ROOT/config/node-private.key \
+>     -out $STATIKO_ROOT/config/node-public.crt \
+>     -subj "/CN=${DOMAIN}"
+> HEREDOC
 > ````
 
 You will also need to generate a DH Parameters file, which is used by Statiko app as well as by every site running on the server. The file should be placed at `$STATIKO_ROOT/config/dhparams.pem`, a location that can be configured with [`tls.dhparams`](TODO) (but keep in mind the configuration option is relative to the path within the container!).
@@ -100,7 +109,7 @@ Statiko nodes are configured with a YAML file `$STATIKO_ROOT/config/node-config.
 
 Many aspects of Statiko nodes and their behaviors are configurable, and the full list of options is available in the [Configuration Options](TODO) article. You can also see an example of a complete configuration file, including optional settings, [here](https://github.com/ItalyPaleAle/Statiko/blob/master/node-config.yaml).
 
-At the very minimum, the configuration file should contain the following values:
+At the very minimum, the configuration file `$STATIKO_ROOT/config/node-config.yaml` for Statiko running as a Docker container should contain the following values:
 
 ```yaml
 # Authorization for managing the node
@@ -112,7 +121,7 @@ auth:
     key: ""
 
   # Authorize with an OAuth 2.0 access token issued by Azure AD
-  # If you generate an Azure AD app for authenticating with nodes as a pre-requisite, enable this and then add the Tenant ID and Client ID (App ID) here
+  # If you generated an Azure AD app for authenticating with nodes as a pre-requisite, enable this and then add the Tenant ID and Client ID (App ID) here
   azureAD:
     enabled: yes
     tenantId: ""
@@ -146,7 +155,7 @@ azure:
       # Name of the code signing key inside the Key Vault (normally, "codesign")
       name: "codesign"
 
-# Node name for the node (choose as you please)
+# Name for the node (choose as you please)
 # Normally, this would be automatically set with the hostname; however, hostnames might be random within a Docker container
 nodeName: "mynode"
 ```

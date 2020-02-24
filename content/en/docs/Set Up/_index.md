@@ -1,7 +1,7 @@
 ---
 title: "Set Up Statiko"
 linkTitle: "Set Up"
-weight: 1
+weight: 10
 description: |
   Installation, pre-requisites, and system requirements
 ---

@@ -1,7 +1,7 @@
 ---
 title: "CLI"
 linkTitle: "CLI"
-weight: 20
+weight: 30
 description: |
-  Using stkcli
+  Reference for the stkcli utility
 ---
