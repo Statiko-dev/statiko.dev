@@ -61,8 +61,8 @@ async function getFile(name, rawUrl) {
     const raw = await response.text()
     const data = yaml.safeLoad(raw)
 
-    // Replace extension with .md
-    name = name.slice(0, -4) + 'md'
+    // Replace extension with .md and replace underscores with dashes
+    name = name.replace(/_/g, '-').slice(0, -4) + 'md'
     
     // Generate the documentation page
     const markdown = buildDocumentationPage(data)
@@ -105,6 +105,7 @@ function buildDocumentationPage(data) {
     const frontMatter = '---\n'
         + 'title: "' + data.name.replace('"', '\\"') + '"\n'
         + 'linkTitle: "' + data.name.replace('stkcli ', '').replace('"', '\\"') + '"\n'
+        + 'weight: ' + (data.name == 'stkcli' ? 1 : 2) + '\n'
         + 'description: "' + data.synopsis.replace('"', '\\"') + '"\n'
         + '---\n\n'
 

@@ -15,9 +15,9 @@ On Azure, Statiko requires:
 
 - Azure Blob Storage: an object storage service to store the app bundles
 - Azure Key Vault: a vault to store TLS certificates (public certificates and private keys) and the code signing key
-- Azure AD: identity service that can be used by clients to authenticate with Statiko nodes (this is optional)
+- Azure AD: identity service that can be used by clients to authenticate with Statiko nodes, via the OpenID protocol (this is optional)
 
-For most users these two services are going to be free or cost a nominal amount every month, less than $1/month after the free trial ends.
+For most users, these two services are going to be free or cost a nominal amount every month, less than $1/month after the free trial ends.
 
 If you don't have one already, get an [Azure account](https://azure.com/free) and start the free trial.
 

@@ -131,7 +131,7 @@ Statiko nodes are configured with a YAML file `/etc/statiko/node-config.yaml`
 
 Many aspects of Statiko nodes and their behaviors are configurable, and the full list of options is available in the [Configuration Options](TODO) article. You can also see an example of a complete configuration file, including optional settings, [here](https://github.com/ItalyPaleAle/Statiko/blob/master/node-config.yaml).
 
-At the very minimum, the configuration file `/etc/statiko/node-config.yaml` for Statiko running as a standalone app should contain the following values:
+At the very minimum, the configuration file `/etc/statiko/node-config.yaml` for Statiko running as a standalone app should contain the following values (file must be owned by the root user):
 
 ```yaml
 # Authorization for managing the node
@@ -206,4 +206,38 @@ nodeName: nil
 
 This section shows how to run Statiko as a background service, using Systemd.
 
+Copy this unit file to `/etc/systemd/system/statiko.service` (file must be owned by the root user):
 
+```text
+[Unit]
+Description=Statiko is a platform for hosting, serving and managing static websites in production
+After=nginx.service
+
+[Service]
+Type=simple
+ExecStart=/usr/local/sbin/statiko
+Restart=always
+User=root
+Wants=nginx.service
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Then enable Statiko to start automatically at boot, and start it right away:
+
+```sh
+sudo systemctl enable statiko
+sudo systemctl start statiko
+```
+
+Once the service has started, you can test that everything works by running sample commands like this from your server:
+
+```sh
+# Should show the status of the node
+curl -k https://localhost/status
+```
+
+# Next steps
+
+Now that your Statiko node is up and running, you can start creating sites and deploying apps on that. Check out how to [manage sites and apps](TODO).
