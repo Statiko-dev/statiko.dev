@@ -18,7 +18,7 @@ At the low level, Statiko nodes are managed via a set of [REST APIs](/docs/rest)
 
 Admins and developers, however, might find it simpler to use [stkcli](/docs/cli), a cross-platform CLI that wraps all REST endpoints and offers other features designed to make managing Statiko nodes more convenient. stkcli is open source ([project on GitHub](https://github.com/ItalyPaleAle/stkcli)) and comes with [pre-compiled binaries](/docs/downloads#stkcli) for Windows, macOS and Linux.
 
-# Using stkcli
+## Using stkcli
 
 After having [installed](/docs/downloads#stkcli) the stkcli, you should be able to invoke it with the `stkcli` command.
 
@@ -31,7 +31,7 @@ stkcli --help
 stkcli auth --help
 ```
 
-## Common flags
+### Common flags
 
 There are **four flags** that are common among most stkcli commands:
 
@@ -67,7 +67,7 @@ stkcli defaults get
 stkcli defaults remove
 ```
 
-## Authorizing stkcli
+### Authorizing stkcli
 
 Most, but not all, Statiko endpoints require authorization.
 
@@ -107,12 +107,12 @@ export NODE_KEY="eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IkhsQzBSMTJza3hOWjF
 stkcli site list
 ```
 
-# REST APIs
+## REST APIs
 
 At its core, stkcli is just a wrapper around Statiko nodes' REST APIs, although it does pack a bunch of convenience methods, such as simplifying uploading apps and certificates. You can invoke those APIs with any HTTP(S) client, such as [curl](https://curl.haxx.se/), or your own application.
 
 You can see the full reference for REST APIs in the [REST](/docs/rest) section, as well as instructions for authenticating calls.
 
-# Next steps
+## Next steps
 
 Check out how to use stkcli to perform common tasks, such as [working with sites and apps](/docs/how-to/working-with-sites-apps).

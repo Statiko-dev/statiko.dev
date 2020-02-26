@@ -20,7 +20,7 @@ Statiko should work with most Linux distributions, including those based on musl
 
 > Note: running Statiko using the official Docker container images is the [recommended approach](/docs/set-up/run-with-docker) for most users.
 
-# Firewall rules
+## Firewall rules
 
 Statiko requires **inbound ports 80 and 443** (TCP) open to serve web traffic.
 
@@ -28,7 +28,7 @@ Additionally, in order to manage Statiko nodes remotely, ensure that port **2265
 
 As for **outbound traffic**, Statiko requires making requests to remote servers via HTTPS, which are responding on port 443 (TCP).
 
-# Download Statiko
+## Download Statiko
 
 Download the last Statiko release:
 
@@ -46,7 +46,7 @@ sudo curl -L "$URL" -o /usr/local/sbin/statiko
 sudo chmod +x /usr/local/sbin/statiko
 ```
 
-# Set up filesystem
+## Set up filesystem
 
 Statiko by defaults stores its configuration in `/etc/statiko` (*configuration folder*), and its data in `/var/statiko` (*data folder*). Both those locations are configurable, however.
 
@@ -83,7 +83,7 @@ sudo mkdir -p $MOUNTPOINT/statiko-data
 sudo ln -s $MOUNTPOINT/statiko-data /var/statiko
 ```
 
-# TLS certificates
+## TLS certificates
 
 Clients (such as the stkcli) can communicate with Statiko nodes using REST APIs, which are used to configure the node: manage sites and apps, check status, etc. This communication happens on port 2265 (configurable with the [`port`](TODO) option), and uses TLS.
 
@@ -125,7 +125,7 @@ sudo sh -c "openssl dhparam 4096 > /etc/statiko/dhparams.pem"
 
 > Using the [`tls.node.enabled`](TODO) configuration option, you can disable TLS for the Statiko app, which will listen on the configured port (default is 2265) without encryption. This is **not recommended** for security reasons, but it could be acceptable if management clients can connect to the Statiko node over an encrypted channel (e.g. VPN). When `tls.node.enabled` is false, you don't need to provide a TLS certificate and key for the Statiko node, however you are still **required to provide a dhparams file**.
 
-# Configuration file
+## Configuration file
 
 Statiko nodes are configured with a YAML file `/etc/statiko/node-config.yaml`
 
@@ -202,7 +202,7 @@ azure:
 nodeName: nil
 ```
 
-# Run Statiko as a background service
+## Run Statiko as a background service
 
 This section shows how to run Statiko as a background service, using Systemd.
 
@@ -238,6 +238,6 @@ Once the service has started, you can test that everything works by running samp
 curl -k https://localhost/status
 ```
 
-# Next steps
+## Next steps
 
 Now that your Statiko node is up and running, you can start creating sites and deploying apps on that. Check out how to [manage sites and apps](TODO).

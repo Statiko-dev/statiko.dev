@@ -19,7 +19,7 @@ The Docker images contain both the Statiko binary and the nginx web server, main
 
 > The images in the _statiko/statiko_ repository on Docker Hub are multi-arch, so Docker will pick the correct architecture automatically. However, continuous integration images (including those tagged with `:canary` and those with a tag starting with `:ci`) are available for amd64 only.
 
-# Firewall rules
+## Firewall rules
 
 Statiko requires **inbound ports 80 and 443** (TCP) open to serve web traffic.
 
@@ -27,7 +27,7 @@ Additionally, in order to manage Statiko nodes remotely, ensure that port **2265
 
 As for **outbound traffic**, Statiko requires making requests to remote servers via HTTPS, which are responding on port 443 (TCP).
 
-# Set up filesystem
+## Set up filesystem
 
 Statiko needs to have two Docker volumes where to store persistent data: one for the configuration, and one for the node's data.
 
@@ -61,7 +61,7 @@ sudo mkdir -p $MOUNTPOINT/statiko-data
 sudo ln -s $MOUNTPOINT/statiko-data $STATIKO_ROOT/data
 ```
 
-# TLS certificates
+## TLS certificates
 
 Clients (such as the stkcli) can communicate with Statiko nodes using REST APIs, which are used to configure the node: manage sites and apps, check status, etc. This communication happens on port 2265 (configurable with the [`port`](TODO) option), and uses TLS.
 
@@ -103,7 +103,7 @@ sudo sh -c "openssl dhparam 4096 > $STATIKO_ROOT/config/dhparams.pem"
 
 > Using the [`tls.node.enabled`](TODO) configuration option, you can disable TLS for the Statiko app, which will listen on the configured port (default is 2265) without encryption. This is **not recommended** for security reasons, but it could be acceptable if management clients can connect to the Statiko node over an encrypted channel (e.g. VPN). When `tls.node.enabled` is false, you don't need to provide a TLS certificate and key for the Statiko node, however you are still **required to provide a dhparams file**.
 
-# Configuration file
+## Configuration file
 
 Statiko nodes are configured with a YAML file `$STATIKO_ROOT/config/node-config.yaml`.
 
@@ -160,7 +160,7 @@ azure:
 nodeName: "mynode"
 ```
 
-# Start the container
+## Start the container
 
 Now that everything is configured, we can start the Docker container:
 
@@ -209,6 +209,6 @@ Once the container has started, you can test that everything works by running sa
 curl -k https://localhost/status
 ```
 
-# Next steps
+## Next steps
 
 Now that your Statiko node is up and running, you can start creating sites and deploying apps on that. Check out how to [manage sites and apps](TODO).

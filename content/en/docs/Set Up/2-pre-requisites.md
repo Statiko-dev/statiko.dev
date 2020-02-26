@@ -23,7 +23,7 @@ If you don't have one already, get an [Azure account](https://azure.com/free) an
 
 After creating the Azure resources, we'll also create a code signing key stored inside Azure Key Vault.
 
-# Azure resources
+## Azure resources
 
 This section explains the Azure resources that you need to deploy, and the commands to do that directly from your terminal.
 
@@ -37,7 +37,7 @@ az login
 
 > Note: some of the commands below require the [jq](https://stedolan.github.io/jq/download/) utility installed
 
-## Resource Group
+### Resource Group
 
 A Resource Group is a logical grouping unit, which will group all resources we're creating (except Azure AD). You can create one with the command below.
 
@@ -56,7 +56,7 @@ az group create \
   --location $AZURE_REGION
 ```
 
-## Azure Storage
+### Azure Storage
 
 Create a Storage Account:
 
@@ -88,7 +88,7 @@ az storage container create \
   --fail-on-exist
 ```
 
-## Azure Key Vault
+### Azure Key Vault
 
 Next, create an Azure Key Vault that will store TLS certificates and code signing keys, safely.
 
@@ -108,13 +108,13 @@ az keyvault create \
   --sku standard
 ```
 
-## Service Principal
+### Service Principal
 
 This Service Principal is used by the Statiko nodes to authenticate with Azure Key Vault and Azure Storage.
 
 Note that we're creating the Service Principal in the "long" way (creating an Azure AD application first, then the Service Principal, then setting its permissions), without using the `azure ad sp create-for-rbac` command, to limit the permissions of the Service Principal to the absolutely minimum required.
 
-### Create the Service Principal
+#### Create the Service Principal
 
 Create an app in the Azure AD:
 
@@ -161,7 +161,7 @@ az ad sp update --id $SP_ID --add tags "HideApp"
 az ad sp update --id $SP_ID --set appRoleAssignmentRequired=true
 ````
 
-### Subscription ID
+#### Subscription ID
 
 Get the Azure subscription ID in a variable:
 
@@ -172,7 +172,7 @@ echo "Azure subscription ID: $AZURE_SUBSCRIPTION"
 
 This variablle will be used by some of the commands below.
 
-### Azure Storage permissions
+#### Azure Storage permissions
 
 Ensure that the Service Principal has the "Storage Blob Data Contributor" role for the Storage Account:
 
@@ -183,7 +183,7 @@ az role assignment create \
   --scope /subscriptions/$AZURE_SUBSCRIPTION/resourceGroups/$RG_NAME/providers/Microsoft.Storage/storageAccounts/$STORAGE_ACCOUNT_NAME
 ```
 
-### Azure Key Vault permissions
+#### Azure Key Vault permissions
 
 Assign permissions to the Service Principal, creating an access policy for Azure Key Vault, with limited permissions:
 
@@ -200,7 +200,7 @@ az keyvault set-policy \
   --spn $SP_ID
 ```
 
-## Azure AD application for client authentication (optional)
+### Azure AD application for client authentication (optional)
 
 > This step is optional
 
@@ -232,7 +232,7 @@ Take note of the following values that will be used in the Statiko node's config
 - Application ID, which is the value for `auth.azureAD.clientId`
 - Tenant ID, which is the value for `auth.azureAD.tenantId`
 
-# Code signing key
+## Code signing key
 
 Lastly, let's create a code signing key inside Azure Key Vault. Statiko will use this key to cryptographically sign app bundles (guaranteeing both origin and integrity), and to verify signatures before deploying apps.
 
@@ -253,7 +253,7 @@ az keyvault key create \
 >
 > If you require a copy of the key saved locally, you can generate a RSA-4096 key with OpenSSL and import it to Azure Key Vault with [`az keyvault key import`](https://docs.microsoft.com/en-us/cli/azure/keyvault/key?view=azure-cli-latest#az-keyvault-key-import).
 
-# Next steps
+## Next steps
 
 You've completed the creation of all pre-requisites. As a next step, learn how to run Statiko:
 

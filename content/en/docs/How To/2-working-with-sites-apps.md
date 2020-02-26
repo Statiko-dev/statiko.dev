@@ -13,7 +13,7 @@ After you've launched your Statiko node(s), it's time to add sites and deploy ap
 Before running the commands below, make sure you've read the [Managing Statiko nodes](/docs/how-to/managing-statiko-nodes) article to learn how to authorize stkcli with your nodes.
 {{% /pageinfo %}}
 
-# Create a new site
+## Create a new site
 
 Before we can host any app, we need to create a new site. Statiko needs to know what sites you want nginx to respond to, and which TLS certificate they should offer.
 
@@ -41,7 +41,7 @@ After adding the site, you can point your domain's DNS records to your server, a
 
 > In addition to redirecting from aliases to the main domain, Statiko also redirects HTTP URLs to HTTPS ones automatically. However, Statiko does not set any [HSTS header](https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security) for you; if you want to set them, you can do so with a [manifest file](/docs/how-to/manifest-files).
 
-# Add a TLS certificate
+## Add a TLS certificate
 
 Rather than using a self-signed certificate, we can upload our own.
 
@@ -81,7 +81,7 @@ stkcli site set \
   --alias another-site.com
 ```
 
-# Deploy an app
+## Deploy an app
 
 Before we can deploy an app, we need to upload it to Azure Blob Storage.
 
