@@ -129,7 +129,7 @@ sudo sh -c "openssl dhparam 4096 > /etc/statiko/dhparams.pem"
 
 Statiko nodes are configured with a YAML file `/etc/statiko/node-config.yaml`
 
-Many aspects of Statiko nodes and their behaviors are configurable, and the full list of options is available in the [Configuration Options](TODO) article. You can also see an example of a complete configuration file, including optional settings, [here](https://github.com/ItalyPaleAle/Statiko/blob/master/node-config.yaml).
+Many aspects of Statiko nodes and their behaviors are configurable, and the full list of options is available in the [Configuring nodes](/docs/set-up/connfiguring-nodes) article.
 
 At the very minimum, the configuration file `/etc/statiko/node-config.yaml` for Statiko running as a standalone app should contain the following values (file must be owned by the root user):
 

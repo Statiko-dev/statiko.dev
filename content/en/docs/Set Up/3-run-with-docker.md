@@ -107,7 +107,7 @@ sudo sh -c "openssl dhparam 4096 > $STATIKO_ROOT/config/dhparams.pem"
 
 Statiko nodes are configured with a YAML file `$STATIKO_ROOT/config/node-config.yaml`.
 
-Many aspects of Statiko nodes and their behaviors are configurable, and the full list of options is available in the [Configuration Options](TODO) article. You can also see an example of a complete configuration file, including optional settings, [here](https://github.com/ItalyPaleAle/Statiko/blob/master/node-config.yaml).
+Many aspects of Statiko nodes and their behaviors are configurable, and the full list of options is available in the [Configuring nodes](/docs/set-up/connfiguring-nodes) article.
 
 At the very minimum, the configuration file `$STATIKO_ROOT/config/node-config.yaml` for Statiko running as a Docker container should contain the following values:
 
