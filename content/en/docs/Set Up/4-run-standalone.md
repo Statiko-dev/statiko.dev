@@ -158,7 +158,7 @@ nginx:
   # User running nginx
   # This depends on your Linux distribution; it's usually "www-data" or "nginx"
   user: "www-data"
-  # Shell commands to start/stop/restart(reload) nginx
+  # Shell commands to start/stop/restart(reload) nginx, and to check its status
   commands:
     # This command should start the nginx server
     # Another common option is "service nginx start"

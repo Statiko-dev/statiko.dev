@@ -25,6 +25,24 @@ The manifest file should be called `_statiko.yaml` and placed in the bundle's to
 
 The YAML document contains a dictionary with five keys, all optional:
 
+```yaml
+# Dictionary with options for files based on their extension
+files:
+  # ...
+
+# Dictionary with options for documents at a certain path
+locations:
+  #...
+
+# Key-value dictionary with URL rewrites (server returning a different file but without sending the client a redirect)
+rewrite:
+  #...
+
+# Documents to show with 404 or 403 errors
+page404: "..."
+page403: "..."
+```
+
 ### `files`
 
 `files` is a dictionary with options for files based on their extension.
