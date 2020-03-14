@@ -163,9 +163,6 @@ nginx:
     # This command should start the nginx server
     # Another common option is "service nginx start"
     start: "systemctl start nginx"
-    # This command should stop the nginx server
-    # Another common option is "service nginx stop"
-    stop: "systemctl stop nginx"
     # This command should send a SIGHUP (reload config) to nginx if it's running, or start it if it's not
     # Another common option is "service nginx status > /dev/null && service nginx reload || service nginx restart"
     restart: "systemctl is-active --quiet nginx && systemctl reload nginx || systemctl restart nginx"

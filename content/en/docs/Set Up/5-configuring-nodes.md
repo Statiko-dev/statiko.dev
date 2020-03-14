@@ -116,11 +116,6 @@ nginx:
     # The value below is the default one
     # Can also be passed with environmental variable NGINX_START
     start: "systemctl start nginx"
-    # This command should stop the nginx server
-    # Another common option is "service nginx stop"
-    # The value below is the default one
-    # Can also be passed with environmental variable NGINX_STOP
-    stop: "systemctl stop nginx"
     # This command should send a SIGHUP (reload config) to nginx if it's running, or start it if it's not
     # Another common option is "service nginx status > /dev/null && service nginx reload || service nginx restart"
     # The value below is the default one
