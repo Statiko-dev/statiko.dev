@@ -54,6 +54,8 @@ The item's value is another dictionary with two keys:
 - `headers`: a key-value dictionary with names and values for custom headers
 - `clientCaching`: a short-hand to configure all client-caching related headers (`Expires`, `Pragma` and `Cache-Control`). The value is a time expression, as defined in the [nginx configuration](http://nginx.org/en/docs/syntax.html), for example `10s` for 10 seconds, `5m` for 5 minutes, `1M 2w` for 1 month and 2 weeks (44 days).
 
+> Note: for security reasons, only a subset of headers can be set with a manifest file: `Expires`, `Cache-Control`, `Content-Disposition`, `Content-Encoding`, `Content-Language`, `Content-MD5`, `Content-Security-Policy`, `Content-Type`, `Last-Modified`, `Link`, `Location`, `P3P`, `Pragma`, `Refresh`, `Set-Cookie`, `Vary`, `Warning`, as well as any header starting with `X-`.
+
 For example, the snippet below tells all clients to cache jpg and png images for 1 month, and sets a custom header `X-Foo` with the value `bar` for PDF files:
 
 ```yaml
