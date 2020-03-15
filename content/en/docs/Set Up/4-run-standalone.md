@@ -169,6 +169,8 @@ nginx:
     # This command should print "1" if nginx is running, or "0" otherwise
     # Another common option is "service nginx status > /dev/null && echo 1 || echo 0"
     status: "systemctl is-active --quiet nginx && echo 1 || echo 0"
+    # This command should test the nginx configuration file, printing only if there's an error
+    test: "nginx -t -q"
 
 # Azure configuration
 azure:

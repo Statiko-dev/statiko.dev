@@ -126,6 +126,9 @@ nginx:
     # The value below is the default one
     # Can also be passed with environmental variable NGINX_STATUS
     status: "systemctl is-active --quiet nginx && echo 1 || echo 0"
+    # This command should test the nginx configuration file, printing only if there's an error
+    # Can also be passed with environmental variable NGINX_TEST
+    test: "nginx -t -q"
 
 # Statiko data folder
 # Defaults to "/var/statiko" if not set

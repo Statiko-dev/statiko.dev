@@ -26,9 +26,10 @@ The manifest file should be called `_statiko.yaml` and placed in the bundle's to
 The YAML document contains a dictionary with five keys, all optional:
 
 ```yaml
-# Dictionary with options for files based on their extension
-files:
-  # ...
+# Array of options for documents at a certain path or file types
+rules:
+  - # ...
+  - # ...
 
 # Dictionary with options for documents at a certain path
 locations:
@@ -43,75 +44,89 @@ page404: "..."
 page403: "..."
 ```
 
-### `files`
+### `rules`
 
-`files` is a dictionary with options for files based on their extension.
+`rules` is an array that lets you define options for documents based on their path or extension.
 
-Each item's key in this dictionary is the extension(s) that you want to match. You can have multiple extensions separating them with a vertical bar `|`.
+Each item in the array contains an identifier for what to match, as well as an `options` dictionary.
 
-The item's value is another dictionary with two keys:
+You can match documents based on:
 
-- `headers`: a key-value dictionary with names and values for custom headers
-- `clientCaching`: a short-hand to configure all client-caching related headers (`Expires`, `Pragma` and `Cache-Control`). The value is a time expression, as defined in the [nginx configuration](http://nginx.org/en/docs/syntax.html), for example `10s` for 10 seconds, `5m` for 5 minutes, `1M 2w` for 1 month and 2 weeks (44 days).
-
-> Note: for security reasons, only a subset of headers can be set with a manifest file: `Expires`, `Cache-Control`, `Content-Disposition`, `Content-Encoding`, `Content-Language`, `Content-MD5`, `Content-Security-Policy`, `Content-Type`, `Last-Modified`, `Link`, `Location`, `P3P`, `Pragma`, `Refresh`, `Set-Cookie`, `Vary`, `Warning`, as well as any header starting with `X-`.
-
-For example, the snippet below tells all clients to cache jpg and png images for 1 month, and sets a custom header `X-Foo` with the value `bar` for PDF files:
-
-```yaml
-# Files dictionary applies rules to files based on their extensions
-files:
-  # Rules for files ending in jpg or png
-  "jpg|png":
-    # Tell clients to cache the images for 1 month (automatically sets `Expires`, `Cache-Control` and `Pragma`)
-    clientCaching: 1M
-  # Rules for files ending in pdf
-  pdf:
-    # Add custom headers
-    headers:
-      # Add a custom header `X-Foo` with value `bar`
-      "X-Foo": "bar"
-```
-
-For keys in the `files` dictionary, you can also use certain short-hands for common file types:
-
-- `_images` is equivalent to `jpg|jpeg|png|gif|ico|svg|svgz|webp|tif|tiff|dng|psd|heif|bmp`
-- `_videos` is equivalent to `mp4|m4v|mkv|webm|avi|mpg|mpeg|ogg|wmv|flv|mov`
-- `_audios` is equivalent to `mp3|mp4|aac|m4a|flac|wav|ogg|wma`
-- `_fonts` is equivalent to `woff|woff2|eot|otf|ttf`
-
-> When adding custom headers, Statiko does currently not maintain a list of "allowed headers". Setting some headers, such as [`Strict-Transport-Security`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security) might have long-lasting consequences, so use with caution.
-
-### `locations`
-
-`locations` is a dictionary that works very similarly to `files`, with the difference than keys in the dictionary are not file extensions, but full location expressions according to [nginx's location blocks syntax](https://www.journaldev.com/26342/nginx-location-directive), which support regular expressions as well. Using location blocks lets you configure in details the rules to apply to files in a certain location.
+- `exact: "/path"`: matches exact paths (equivalent to using the `=` modifier in the nginx location block)
+- `prefix: "/path"`: matches paths that begin with the prefix (equivalent to using no modifier in the nginx location block)
+- `match: "regular expression"`: matches paths based on a case-insensitive regular expression (equivalent to using the `~*` modifier in the nginx location block). You can use any Perl-compatible regular expression.
+  - With the `match` key, you can also specify `caseSensitive: true` (default is false) to match the regular expression in a case-sensitive way (equivalent to using the `~` modifier in the nginx location block)
+- `file: "extension"`: matches files with a certain extension (or a list of extensions, separated by a comma), case-insensitive
 
 For example:
 
 ```yaml
-# Locations dictionary applies rules to pages as matched by nginx location blocks
-locations:
-  # Apply to all files in the / location, which means all files in the site
-  "/":
-    # Add a custom header
-    headers:
-      # Add the `X-Hello` header with value `world`
-      "X-Hello": "world"
-  # Apply to all files in the /static/ folder
-  "/static/":
-    # Tell clients to cache the response for 1 year
-    clientCaching: 1y
-    # Add a custom header
-    headers:
-      # Add the `X-Static` header with value `1`
-      "X-Static": "1"
-  # Match all files that contain "en" (case-insensitive) in the name
-  "~* en":
-    # Add a custom header
-    headers:
-      # Add the `Content-Language` header with value `en`
-      "Content-Language": "en"
+# Rules for documents at a specific path or with a specific extension
+rules:
+  # Applies the options defined below to the document at the exact path "/path/to/file.html"
+  - exact: "/path/to/file.html"
+    options:
+      # ...
+  # Applies the options defined below to all documents in the "/music/" folder
+  - prefix: "/music/"
+    options:
+      # ...
+  # When prefix is "/", applies the options to all documents
+  - prefix: "/"
+    options:
+      # ...
+  # Matches paths by regular expression; for example, this one matches all files that contain `.en.` in the file name (anywhere in the path)
+  - match: "\.en\."
+    # When using a regular expression match, by default it's case-insensitive. You can make it case-sensitive by setting `caseSensitive: true`
+    caseSensitive: true
+    options:
+      # ...
+  # Applies to all png files
+  - file: "png"
+    options:
+      # ...
+  # Applies to jpg and jpeg files
+  - file: "jpg,jpeg"
+    options:
+      # ...
 ```
+
+When matching with the `file` key, you can also use certain short-hands for common file types:
+
+- `file: "_images"` is equivalent to `jpg,jpeg,png,gif,ico,svg,svgz,webp,tif,tiff,dng,psd,heif,bmp`
+- `file: "_videos"` is equivalent to `mp4,m4v,mkv,webm,avi,mpg,mpeg,ogg,wmv,flv,mov`
+- `file: "_audios"` is equivalent to `mp3,mp4,aac,m4a,flac,wav,ogg,wma`
+- `file: "_fonts"` is equivalent to `woff,woff2,eot,otf,ttf`
+
+### `rules.$i.options`
+
+The `options` dictionary for each rule can contain these keys:
+
+- `headers`: a key-value dictionary with names and values for custom headers
+- `clientCaching`: a short-hand to configure all client-caching related headers (`Expires`, `Pragma` and `Cache-Control`). The value is a time expression, as defined in the [nginx configuration](http://nginx.org/en/docs/syntax.html), for example `10s` for 10 seconds, `5m` for 5 minutes, `1M 2w` for 1 month and 2 weeks (44 days).
+
+For example, the snippet below tells all clients to cache all images for 1 month, and sets a custom header `Content-Disposition` with the value `attachment` (which suggests browsers to prompt files to be downloaded rather than displayed inline) for all files in the `/videos/` folder:
+
+```yaml
+# Rules dictionary applies rules to documents based on their path or file extension
+rules:
+  # Rules for images
+  - file: "_images"
+    # Options to apply
+    options:
+      # Tell clients to cache the images for 1 month (automatically sets `Expires`, `Cache-Control` and `Pragma`)
+      clientCaching: 1M
+  # Rules for documents in the "/videos/" folder
+  - prefix: "/videos/"
+    # Options to apply
+    options:
+      # Add custom headers
+      headers:
+        # Add the header `Content-Disposition` with value `attachment`
+        "Content-Disposition": "attachment"
+```
+
+> Note: for security reasons, only a subset of headers can be set with a manifest file: `Expires`, `Cache-Control`, `Content-Disposition`, `Content-Encoding`, `Content-Language`, `Content-MD5`, `Content-Security-Policy`, `Content-Type`, `Last-Modified`, `Link`, `Location`, `P3P`, `Pragma`, `Refresh`, `Set-Cookie`, `Vary`, `Warning`, as well as any header starting with `X-`.
 
 ### `rewrite`
 
