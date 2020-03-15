@@ -1,6 +1,8 @@
 # Required variables:
 # NODE_ADDRESS: Address (IP or hostname) of the platform's node to connect to (must be able to accept connections on port 2265)
 # NODE_KEY (secret): shared key for authenticating with the node
+# CF_ZONE_ID (secret): zone ID for the domain on Cloudflare (for purging cache)
+# CF_AUTH_KEY (secret): API auth key for Cloudflare (for purging cache)
 
 # Define repository
 resources:
@@ -55,6 +57,15 @@ stages:
           # Build the site
           - script: 'make dist'
             displayName: 'Build site'
+          
+          # Test links
+          # - script: |
+          #     ./node_modules/.bin/serve -n -l 8080 public &
+          #     SERVER_PID=$!
+          #     echo "Server started with PID ${SERVER_PID}"
+          #     sleep 5
+          #     npm run test
+          #     kill $SERVER_PID
 
           # Publish the compiled site as pipeline artifact
           - publish: '$(System.DefaultWorkingDirectory)/public'
@@ -188,12 +199,20 @@ stages:
                 # Deploy app to production
                 - script: |
                     set -e
+
+                    # Deploy the app
                     ./stkcli deploy \
                       -n $(NODE_ADDRESS) \
                       -k \
                       -d $(SITE_PRODUCTION) \
                       -a statiko-docs \
                       -v $(Build.BuildNumber)
+                    
+                    # Purge the CDN cache
+                    curl -X POST "https://api.cloudflare.com/client/v4/zones/$(CF_ZONE_ID)/purge_cache" \
+                      -H "Authorization: Bearer $(CF_AUTH_KEY)" \
+                      -H "Content-Type: application/json" \
+                      --data '{"purge_everything":true}'
                   displayName: 'Deploy app to production'
                   env:
                     NODE_KEY: $(NODE_KEY)
