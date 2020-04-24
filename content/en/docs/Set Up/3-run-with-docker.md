@@ -93,15 +93,9 @@ These locations can be changed with the [`tls.node.certificate`](TODO) and [`tls
 > HEREDOC
 > ````
 
-You will also need to generate a DH Parameters file, which is used by Statiko app as well as by every site running on the server. The file should be placed at `$STATIKO_ROOT/config/dhparams.pem`, a location that can be configured with [`tls.dhparams`](TODO) (but keep in mind the configuration option is relative to the path within the container!).
+Statiko automatically generates a set of DH parameters for the TLS server. When a Statiko node if first launched, it uses a set of built-in parameters, then it generates a new set of DH parameters for the node in background. Those parameters are re-generated every 90 days, approximately.
 
-To generate a dhparams file (this might take a while!):
-
-````sh
-sudo sh -c "openssl dhparam 4096 > $STATIKO_ROOT/config/dhparams.pem"
-````
-
-> Using the [`tls.node.enabled`](TODO) configuration option, you can disable TLS for the Statiko app, which will listen on the configured port (default is 2265) without encryption. This is **not recommended** for security reasons, but it could be acceptable if management clients can connect to the Statiko node over an encrypted channel (e.g. VPN). When `tls.node.enabled` is false, you don't need to provide a TLS certificate and key for the Statiko node, however you are still **required to provide a dhparams file**.
+> Using the [`tls.node.enabled`](TODO) configuration option, you can disable TLS for the Statiko app, which will listen on the configured port (default is 2265) without encryption. This is **not recommended** for security reasons, but it could be acceptable if management clients can connect to the Statiko node over an encrypted channel (e.g. VPN). When `tls.node.enabled` is false, you don't need to provide a TLS certificate and key for the Statiko node.
 
 ## Configuration file
 

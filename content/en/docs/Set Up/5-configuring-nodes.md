@@ -184,9 +184,6 @@ azure:
 
 # TLS
 tls:
-  # Diffie-Hellman parameters used by all TLS-enabled sites
-  # Defaults to "/etc/statiko/dhparams.pem" if not set
-  dhparams: "/etc/statiko/dhparams.pem"
   node:
     # Enable TLS for connections with the node's management APIs
     # Using TLS is strongly recommended

@@ -1,6 +1,6 @@
 ---
-title: "Health Check"
-linkTitle: "Health Check"
+title: "Health check"
+linkTitle: "Health check"
 slug: health-check
 weight: 3
 description: |

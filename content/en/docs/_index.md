@@ -35,3 +35,7 @@ Statiko's core features:
 - Distributed as a Docker container for simplified deployment, also on Kubernetes; however, you can run Statiko on any Linux server un-containerized if you prefer
 
 Additionally, Statiko nodes can be configured in a cluster, delivering horizontal scalability and high-availability. Nodes can be geo-distributed for very high level of redundancy. Nodes are automatically kept in sync thanks to [etcd](https://etcd.io/).
+
+## Why Statiko
+
+TODO
