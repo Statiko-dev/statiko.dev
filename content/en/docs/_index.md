@@ -21,7 +21,7 @@ Statiko runs on any Linux server as a standalone app or a Docker container. You 
 
 Lastly, Statiko is designed to support scenarios that require horizontal scalability, high-availibity, and even geo-redundancy.
 
-Statiko is free software, released under the GNU Affero General Public License v3.0 (see [LICENSE](https://github.com/ItalyPaleAle/Statiko/blob/master/LICENSE)).
+Statiko is free software, released under the GNU Affero General Public License v3.0 (see [LICENSE](https://github.com/Statiko-dev/Statiko/blob/master/LICENSE)).
 
 ## Features
 

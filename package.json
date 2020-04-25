@@ -1,25 +1,25 @@
 {
-  "name": "statiko-docs",
-  "version": "0.0.1",
-  "description": "Documentation for Statiko",
-  "main": "none.js",
+  "name": "statiko.dev",
+  "version": "1.0.0",
+  "description": "Website and documentation for Statiko",
+  "main": "",
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ItalyPaleAle/statiko-docs.git"
+    "url": "git+https://github.com/Statiko-dev/statiko.dev.git"
   },
   "author": "",
-  "license": "ISC",
+  "license": "",
   "bugs": {
-    "url": "https://github.com/ItalyPaleAle/statiko-docs/issues"
+    "url": "https://github.com/Statiko-dev/statiko.dev/issues"
   },
-  "homepage": "https://github.com/ItalyPaleAle/statiko-docs#readme",
+  "homepage": "https://github.com/Statiko-dev/statiko.dev#readme",
   "dependencies": {},
   "devDependencies": {
-    "autoprefixer": "^9.7.4",
+    "autoprefixer": "^9.7.6",
     "js-yaml": "^3.13.1",
     "node-fetch": "^2.6.0",
     "postcss-cli": "^7.1.0"

@@ -39,7 +39,7 @@ ARCH="amd64"
 
 # Get the latest release's URL from the GitHub API
 # Note: make sure the "jq" application is installed
-URL=$(curl -s https://api.github.com/repos/ItalyPaleAle/Statiko/releases/latest -H "Accept: application/vnd.github.v3+json" \
+URL=$(curl -s https://api.github.com/repos/Statiko-dev/Statiko/releases/latest -H "Accept: application/vnd.github.v3+json" \
   | jq -r ".assets[] | select(.name | test(\"linux_$ARCH\")) | .browser_download_url")
 echo "Downloading Statiko: $URL"
 sudo curl -L "$URL" -o /usr/local/sbin/statiko

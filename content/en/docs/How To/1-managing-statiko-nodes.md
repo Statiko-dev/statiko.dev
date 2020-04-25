@@ -16,7 +16,7 @@ Statiko offers two ways to manage nodes dynamically and programmatically, also r
 
 At the low level, Statiko nodes are managed via a set of [REST APIs](/docs/rest). Each node includes an API server that listens to HTTPS requests made on port 2265 (both the port and the use of TLS are configurable).
 
-Admins and developers, however, might find it simpler to use [stkcli](/docs/cli), a cross-platform CLI that wraps all REST endpoints and offers other features designed to make managing Statiko nodes more convenient. stkcli is open source ([project on GitHub](https://github.com/ItalyPaleAle/stkcli)) and comes with [pre-compiled binaries](/docs/downloads#stkcli) for Windows, macOS and Linux.
+Admins and developers, however, might find it simpler to use [stkcli](/docs/cli), a cross-platform CLI that wraps all REST endpoints and offers other features designed to make managing Statiko nodes more convenient. stkcli is open source ([project on GitHub](https://github.com/Statiko-dev/stkcli)) and comes with [pre-compiled binaries](/docs/downloads#stkcli) for Windows, macOS and Linux.
 
 ## Using stkcli
 

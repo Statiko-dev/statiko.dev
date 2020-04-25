@@ -3,7 +3,7 @@
 'use strict'
 
 // GitHub repository for stkcli
-const repo = 'ItalyPaleAle/stkcli'
+const repo = 'Statiko-dev/stkcli'
 
 // Path where the docs (YAML files) are stored in the repo
 const docsPath = 'docs/yaml'
