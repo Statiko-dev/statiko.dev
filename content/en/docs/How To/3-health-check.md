@@ -22,32 +22,34 @@ Here's the response from one of the nodes hosting this own site (pretty-printed 
   },
   "sync": {
     "running": false,
-    "lastSync": "2020-02-25T07:39:19.086829926Z"
+    "lastSync": "2020-04-25T15:36:53.4577868Z"
+  },
+  "store": {
+    "healthy": true
   },
   "health": [
     {
+      "healthy": true,
       "domain": "staging.statiko.dev",
-      "app": "statiko-docs-20200225.1",
-      "status": 200,
-      "size": 9703,
-      "time": "2020-02-25T15:24:23.973859497Z"
+      "app": "statiko-docs-20200425.1",
+      "time": "2020-04-25T15:24:23.973859497Z"
     },
     {
+      "healthy": true,
       "domain": "statiko.dev",
-      "app": "statiko-docs-20200225.1",
-      "status": 200,
-      "size": 9703,
-      "time": "2020-02-25T15:24:23.972776124Z"
+      "app": "statiko-docs-20200425.1",
+      "time": "2020-04-25T15:24:23.972776124Z"
     }
   ]
 }
 ```
 
-There are three main keys in this JSON document:
+There are four main keys in this JSON document:
 
 - `nginx` contains the status of the nginx server, if it's up and running
 - `sync` lets you know if the node is performing a sync, and the last time it completed one. A sync happens every time the node receives a new state (e.g. new site to be created, new app to be deployed, etc).
-- `health` lists all the sites configured and the apps (if any) deployed to them. Statiko periodically requests the app from the web server (last time is reported in the `time` key), storing the status code it received and the size of the response for the index file, in bytes. Responses for healthy sites are cached for a few minutes (to avoid probing all sites on each status request), and the cache is purged right away if the state of the node changes (e.g. a new app is deployed).
+- `store` contains information on the health of the store, including the status of the connection to etcd when used.
+- `health` lists all the sites configured and the apps (if any) deployed to them. Statiko periodically requests the app from the web server to check its health (last time is reported in the `time` key). Responses for healthy sites are cached for a few minutes (to avoid probing all sites on each status request), and the cache is purged right away if the state of the node changes (e.g. a new app is deployed).
 
 You can also probe the status endpoint for a single domain by appending it to the path, for example `/status/statiko.dev`. This will have the same structure, but only one site in the response body:
 
@@ -58,15 +60,17 @@ You can also probe the status endpoint for a single domain by appending it to th
   },
   "sync": {
     "running": false,
-    "lastSync": "2020-02-25T07:39:19.086829926Z"
+    "lastSync": "2020-04-25T15:36:53.4577868Z"
+  },
+  "store": {
+    "healthy": true
   },
   "health": [
     {
+      "healthy": true,
       "domain": "statiko.dev",
-      "app": "statiko-docs-20200225.1",
-      "status": 200,
-      "size": 9703,
-      "time": "2020-02-25T15:29:24.662973622Z"
+      "app": "statiko-docs-20200425.1",
+      "time": "2020-04-25T15:24:23.972776124Z"
     }
   ]
 }

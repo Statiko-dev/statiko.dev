@@ -46,7 +46,7 @@ openssl dgst \
 | base64 > $FILE.sig
 ````
 
-## Verify a signature
+### Verify a signature
 
 Example of verifying a signature:
 
