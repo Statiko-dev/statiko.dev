@@ -14,6 +14,8 @@ Statiko lets app developers define various details of the web server configurati
 - Manage pages for 404 (Not Found) and 403 (Forbidden) errors
 - Set headers to enable security features, such as [`Content-Security-Policy`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy), [X-Frame-Options](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options)
 - Set any other HTTP header, such as `Content-Type`, `Content-Disposition`, etc, or custom `X-*` headers
+- Deny access to certain paths (forcing a 404 status code)
+- Create basic proxies to other locations
 
 These options are defined with a Statiko manifest file, which is a YAML file called `_statiko.yaml` shipped together with your app's code.
 
@@ -53,7 +55,7 @@ Each item in the array contains an identifier for what to match, as well as an `
 You can match documents based on:
 
 - `exact: "/path"`: matches exact paths (equivalent to using the `=` modifier in the nginx location block)
-- `prefix: "/path"`: matches paths that begin with the prefix (equivalent to using no modifier in the nginx location block)
+- `prefix: "/path"`: matches paths that begin with the prefix (equivalent to using the `^~` modifier in the nginx location block; exception is the case of the `/` prefix which doesn't use any modifier)
 - `match: "regular expression"`: matches paths based on a case-insensitive regular expression (equivalent to using the `~*` modifier in the nginx location block). You can use any Perl-compatible regular expression.
   - With the `match` key, you can also specify `caseSensitive: true` (default is false) to match the regular expression in a case-sensitive way (equivalent to using the `~` modifier in the nginx location block)
 - `file: "extension"`: matches files with a certain extension (or a list of extensions, separated by a comma), case-insensitive
@@ -104,8 +106,15 @@ The `options` dictionary for each rule can contain these keys:
 
 - `headers`: a key-value dictionary with names and values for custom headers
 - `clientCaching`: a short-hand to configure all client-caching related headers (`Expires`, `Pragma` and `Cache-Control`). The value is a time expression, as defined in the [nginx configuration](http://nginx.org/en/docs/syntax.html), for example `10s` for 10 seconds, `5m` for 5 minutes, `1M 2w` for 1 month and 2 weeks (44 days).
+- `deny`: a boolean that when true forbids access to the path, always returning a 404 status code
+- `proxy`: proxies all requests to the specified URL
 
-For example, the snippet below tells all clients to cache all images for 1 month, and sets a custom header `Content-Disposition` with the value `attachment` (which suggests browsers to prompt files to be downloaded rather than displayed inline) for all files in the `/videos/` folder:
+For example, the snippet below:
+
+1. Tells all clients to cache all images for 1 month
+2. Sets a custom header `Content-Disposition` with the value `attachment` (which suggests browsers to prompt files to be downloaded rather than displayed inline) for all files in the `/videos/` folder
+3. Proxies all requests for the `/golang/` path to `https://golang.org/`
+4. Denies access to the `/forbidden.txt` file
 
 ```yaml
 # Rules dictionary applies rules to documents based on their path or file extension
@@ -124,9 +133,23 @@ rules:
       headers:
         # Add the header `Content-Disposition` with value `attachment`
         "Content-Disposition": "attachment"
+  # Rules for the "/golang/" path
+  - prefix: "/golang/"
+    # Options to apply
+    options:
+      # Proxy all requests to "https://golang.org/"
+      proxy: "https://golang.org/"
+  # Rules for the "/forbidden.txt" file
+  - exact: "/forbidden.txt"
+    # Options to apply
+    options:
+      # Deny access (returns a 404 response)
+      deny: true
 ```
 
 > Note: for security reasons, only a subset of headers can be set with a manifest file: `Expires`, `Cache-Control`, `Content-Disposition`, `Content-Encoding`, `Content-Language`, `Content-MD5`, `Content-Security-Policy`, `Content-Type`, `Last-Modified`, `Link`, `Location`, `P3P`, `Pragma`, `Refresh`, `Set-Cookie`, `Vary`, `Warning`, as well as any header starting with `X-`.
+
+> Note: the `proxy` rule sets the exact address for the `proxy_pass` rule for nginx. Adding a path after the domain name changes the behavior of the proxy, as explained in the [documentation](http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_pass) for nginx.
 
 ### `rewrite`
 
