@@ -184,9 +184,11 @@ azure:
 
 # TLS
 tls:
+  # TLS configuration for the node's management APIs
   node:
     # Enable TLS for connections with the node's management APIs
     # Using TLS is strongly recommended
+    # This impacts the node's management APIs only, and not individual websites
     # Defaults to true if not set
     enabled: yes
     # Path to the TLS certificate for the node's management APIs
@@ -195,6 +197,16 @@ tls:
     # Path to the TLS key for the node's management APIs
     # Defaults to "/etc/statiko/node-private.key" if not set
     key: "/etc/statiko/node-private.key"
+  # Configuration for DH parameters generation
+  dhparams:
+    # Automatically re-generate DH parameters after a specified number of days
+    # When this is 0, DH parameters are not automatically re-generated at certain intervals; however, the cluster will still generate cluster-specific parameters when first started
+    # Defaults to 120 (days) if not set
+    maxAge: 120
+    # Number of bits for the generated DH parameters
+    # Must be 1024, 2048 or 4096. Using 1024 bits is strongly discouraged
+    # Defaults to 4096 if not set
+    bits: 4096
 
 # Node name
 # Defaults to the hostname if not set
