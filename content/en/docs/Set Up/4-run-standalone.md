@@ -115,7 +115,7 @@ These locations can be changed with the [`tls.node.certificate`](TODO) and [`tls
 > HEREDOC
 > ````
 
-Statiko automatically generates a set of DH parameters for the TLS server. When a Statiko cluster if first launched, it uses a set of built-in parameters, then it generates a new set of DH parameters for the cluster in background. Those parameters are re-generated every 90 days, approximately.
+Statiko automatically generates a set of DH parameters for the TLS server. When a Statiko cluster is first launched, it uses a set of built-in parameters, then it generates a new set of DH parameters for the cluster in background. Those parameters are re-generated every 120 days by default (automatic regeneration can be disabled with the [`tls.dhparams.maxAge`](TODO) option).
 
 > Using the [`tls.node.enabled`](TODO) configuration option, you can disable TLS for the Statiko app, which will listen on the configured port (default is 2265) without encryption. This is **not recommended** for security reasons, but it could be acceptable if management clients can connect to the Statiko node over an encrypted channel (e.g. VPN). When `tls.node.enabled` is false, you don't need to provide a TLS certificate and key for the Statiko node.
 

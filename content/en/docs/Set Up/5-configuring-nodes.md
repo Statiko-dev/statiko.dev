@@ -202,10 +202,12 @@ tls:
     # Automatically re-generate DH parameters after a specified number of days
     # When this is 0, DH parameters are not automatically re-generated at certain intervals; however, the cluster will still generate cluster-specific parameters when first started
     # Defaults to 120 (days) if not set
+    # Can also be passed with environmental variable TLS_DHPARAMS_MAX_AGE
     maxAge: 120
     # Number of bits for the generated DH parameters
     # Must be 1024, 2048 or 4096. Using 1024 bits is strongly discouraged
     # Defaults to 4096 if not set
+    # Can also be passed with environmental variable TLS_DHPARAMS_BITS
     bits: 4096
 
 # Node name
@@ -220,6 +222,13 @@ manifestFile: "_statiko.yaml"
 # Set to true to require all deployed apps to be cryptographically signed
 # Defaults to false if not set (allow unsigned apps)
 disallowUnsignedApps: false
+
+# Set this to true if this node cannot become the leader of the cluster
+# This should only be used with Statiko nodes that are configured as part of a larger cluster
+# It has no effect when `store` is `file`
+# Defaults to false if not set (node can become a leader)
+# Can also be passed with environmental variable DISALLOW_LEADERSHIP
+disallowLeadership: false
 
 # Configuration for sending notifications to admins
 notifications:

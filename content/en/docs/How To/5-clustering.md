@@ -80,11 +80,23 @@ state:
 # You need to set a unique nodeName for each node in the cluster, or conflicts might happen
 # If nodeName is empty, Statiko will determine the name automatically from the machine's hostname, but that doesn't work reliably in containers
 nodeName: ""
+
+# You can prevent specific nodes to become leaders of the cluster by setting this option to true
+# Use this option sparingly: a cluster without a leader will behave unexpectedly.
+disallowLeadership: false
 ```
 
 Save the changes above to the configuration file, then restart the Statiko service or container in all nodes. The nodes will all connect to the same etcd cluster, and they will sync their state.
 
 > You can migrate the state from a file store to etcd using the stkcli commands [stkcli state get](/docs/cli/stkcli-state-get) to back up the state, and then restore it with [stkcli state set](/docs/cli/stkcli-state-set).
+
+### Cluster leader
+
+One of the nodes in the cluster will become the leader. The leader node takes on additional responsibilities such as generating self-signed TLS certificates and re-generating the DH parameters.
+
+Tasks assigned to the leader can be CPU-intensive, so if you have the option to exclude certain nodes from the leader election by setting `disallowLeadership` to true.
+
+You should plan to have at least one node capable of becoming a leader up at all times. Without that, certain tasks will not run (e.g. checking for expiring TLS certificates), and more importantly, state syncs that involve generating new self-signed certificates will not complete.
 
 ## Architecting the solution
 
