@@ -192,9 +192,11 @@ tls:
     # Defaults to true if not set
     enabled: yes
     # Path to the TLS certificate for the node's management APIs
+    # If this is empty or the file doesn't exist, will generate a self-signed certificate
     # Defaults to "/etc/statiko/node-public.crt" if not set
     certificate: "/etc/statiko/node-public.crt"
     # Path to the TLS key for the node's management APIs
+    # If this is empty or the file doesn't exist, will generate a self-signed certificate
     # Defaults to "/etc/statiko/node-private.key" if not set
     key: "/etc/statiko/node-private.key"
   # Configuration for DH parameters generation
