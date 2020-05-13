@@ -35,6 +35,7 @@ Let's start by creating a folder for all of Statiko data, which we'll call the *
 
 ```sh
 export STATIKO_ROOT="/statiko"
+
 # Configuration
 sudo mkdir -p $STATIKO_ROOT/config
 sudo chmod 0700 $STATIKO_ROOT/config
