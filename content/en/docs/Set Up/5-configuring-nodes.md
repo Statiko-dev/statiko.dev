@@ -167,20 +167,8 @@ azure:
   # Azure Key Vault
   keyVault:
     # Name of the Key Vault
-    # *Required*
     # Can also be passed with environmental variable AZURE_KEYVAULT_NAME
     name: ""
-
-    # Code signing key
-    codesignKey:
-      # Name of the code signing key inside the Key Vault
-      # Defaults to "codesign" if not set
-      # Can also be passed with environmental variable CODESIGN_KEY_NAME
-      name: "codesign"
-      # Version of the code signing key inside the Key Vault
-      # Defaults to the latest one if not set
-      # Can also be passed with environmental variable CODESIGN_KEY_VERSION
-      version: null
 
 # TLS
 tls:
@@ -191,12 +179,15 @@ tls:
     # This impacts the node's management APIs only, and not individual websites
     # Defaults to true if not set
     enabled: yes
+
+    # TODO: ACME
+
     # Path to the TLS certificate for the node's management APIs
-    # If this is empty or the file doesn't exist, will generate a self-signed certificate
+    # If this is empty or the file doesn't exist, will generate a self-signed certificate or request one from an ACME service
     # Defaults to "/etc/statiko/node-public.crt" if not set
     certificate: "/etc/statiko/node-public.crt"
     # Path to the TLS key for the node's management APIs
-    # If this is empty or the file doesn't exist, will generate a self-signed certificate
+    # If this is empty or the file doesn't exist, will generate a self-signed certificate or request one from an ACME service
     # Defaults to "/etc/statiko/node-private.key" if not set
     key: "/etc/statiko/node-private.key"
   # Configuration for DH parameters generation
@@ -221,9 +212,16 @@ nodeName: nil
 # Defaults to "_statiko.yaml" if not set
 manifestFile: "_statiko.yaml"
 
-# Set to true to require all deployed apps to be cryptographically signed
-# Defaults to false if not set (allow unsigned apps)
-disallowUnsignedApps: false
+# Configuration for signing app bundles
+codesign:
+  # If true, it will not deploy apps whose bundles are not signed
+  # Note that if the bundle contains a signature, then it is still rejected if the signature is invalid
+  # Defaults to false if not set (unsigned bundles are accepted)
+  required: false
+  # Public key used to validate signatures; must be a PEM-encoded public RSA key
+  # If this key is not set, signatures are never validated even when present
+  # This is required if `codesign.required` is set to true
+  publicKey: ""
 
 # Set this to true if this node cannot become the leader of the cluster
 # This should only be used with Statiko nodes that are configured as part of a larger cluster
@@ -263,4 +261,3 @@ At the very minimum, the following keys must be set in the configuration file fo
 - `azure`:
   - `azure.sp.tenantId`, `azure.sp.clientId` and `azure.sp.clientSecret` must be set with the details of the Azure Service Principal
   - `azure.storage.account` must be set with the name of the Azure Storage Account created in the pre-requisites step
-  - `azure.keyVault.name` must be set with the name of the Azure Key Vault created in the pre-requisites step
