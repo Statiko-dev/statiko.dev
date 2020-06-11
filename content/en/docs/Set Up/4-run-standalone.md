@@ -22,9 +22,9 @@ Statiko should work with most Linux distributions, including those based on musl
 
 ## Firewall rules
 
-Statiko requires **inbound ports 80 and 443** (TCP) open to serve web traffic.
+Statiko requires **inbound ports 80 and 443** (TCP) open to serve web traffic. Most deployments will require these ports to be open to the world.
 
-Additionally, in order to manage Statiko nodes remotely, ensure that port **2265** (TCP) is open as well. This port can be changed in the configuration file: see [`port`](TODO)
+Additionally, in order to manage Statiko nodes remotely, ensure that port **2265** (TCP) is open as well. Depending on your setup, this port could be restricted to certain IPs only, or you could connect to from the LAN or using a VPN only. This port can be changed in the configuration file: see [`port`](TODO)
 
 As for **outbound traffic**, Statiko requires making requests to remote servers via HTTPS, which are responding on port 443 (TCP).
 
@@ -67,9 +67,9 @@ sudo mkdir /var/statiko
 
 ### About the data folder and temporary file systems
 
-If your server is running within an **Azure Virtual Machine**, or another provider that offers an ephemeral, directly-attached disk, you might consider storing Statiko's data folder in there. Doing this can give you significant performance benefits, thanks to much faster disk I/O.
+If your server is running within a platform that offers an ephemeral, directly-attached disk (e.g. Azure Virtual Machines), you might consider storing Statiko's data folder in there. Doing this can give you significant performance benefits, thanks to much faster disk I/O.
 
-In fact, as long as the folder containing the configuration data for Statiko is on a durable storage, there is no harm in storing the data folder on a temporary disk. In case the data got lost, Statiko will easily re-create it once the app starts.
+In fact, as long as the folder containing the configuration data for Statiko is on a durable storage, there is no harm in storing the data folder on a temporary disk. In case the data got lost, Statiko will easily re-create it as soon as the node starts.
 
 Assuming your temporary disk is mounted on `/mnt/data`, to store your Statiko data folder there run:
 
